@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  mcp-latex:
+    image: mcp-latex-simple
+    container_name: mcp-latex-server
+    restart: unless-stopped
+    ports:
+      - "8083:8080"
+    environment:
+      - PORT=8080
+      - LATEX_BASE_URL=http://localhost:8083
+      - LATEX_MAX_FILE_AGE_HOURS=24
+    volumes:
+      - ./compiled:/app/compiled
+      - ./logs:/app/compiled/logs
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/mcp || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

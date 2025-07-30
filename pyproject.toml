@@ -1,0 +1,22 @@
+[project]
+name = "latex-mcp-server"
+version = "1.0.0"
+description = "A Model Context Protocol server for LaTeX compilation and document generation"
+authors = [{name = "Lachlan Bridges", email = "lachlan@lachlanbridges.com"}]
+license = {text = "MIT"}
+requires-python = ">=3.11"
+dependencies = [
+    "fastmcp>=2.10",
+    "jinja2>=3.1",
+    "pydantic>=2.7",
+    "pyyaml>=6.0",
+    "uvicorn>=0.30"
+]
+
+[project.urls]
+Homepage = "https://github.com/lachlanbridges/latex-mcp-server"
+Repository = "https://github.com/lachlanbridges/latex-mcp-server"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"

@@ -1,0 +1,30 @@
+# Docker Compose snippet for MCP LaTeX Server
+# Add this service to your existing docker-compose.yml
+
+services:
+  mcp-latex:
+    image: mcp-latex-simple
+    container_name: mcp-latex-server
+    restart: unless-stopped
+    ports:
+      - "8083:8080"  # Map host port 8083 to container port 8080
+    environment:
+      - PORT=8080
+      - LATEX_BASE_URL=http://localhost:8083
+      - LATEX_MAX_FILE_AGE_HOURS=24
+    volumes:
+      # Optional: Mount volume for persistent compiled files
+      - ./latex-compiled:/app/compiled
+      - ./latex-logs:/app/compiled/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/mcp"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - web  # Add to your existing network if you have one
+
+# If you don't have a networks section, add this:
+# networks:
+#   web:
+#     external: true

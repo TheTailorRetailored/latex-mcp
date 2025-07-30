@@ -1,0 +1,44 @@
+{
+  "name": "multiple_choice",
+  "description": "Creates a multiple choice question with 4 options",
+  "parameters": [
+    {
+      "name": "question",
+      "type": "string",
+      "description": "The question text",
+      "required": true
+    },
+    {
+      "name": "option_a",
+      "type": "string", 
+      "description": "Option A text",
+      "required": true
+    },
+    {
+      "name": "option_b",
+      "type": "string",
+      "description": "Option B text", 
+      "required": true
+    },
+    {
+      "name": "option_c",
+      "type": "string",
+      "description": "Option C text",
+      "required": true
+    },
+    {
+      "name": "option_d",
+      "type": "string",
+      "description": "Option D text",
+      "required": true
+    },
+    {
+      "name": "correct_answer",
+      "type": "string",
+      "description": "The correct answer letter (A, B, C, or D)",
+      "required": false,
+      "default": ""
+    }
+  ],
+  "template": "\\begin{question}\n{question}\n\\end{question}\n\n\\begin{choices}\n\\choice {option_a}\n\\choice {option_b}\n\\choice {option_c}\n\\choice {option_d}\n\\end{choices}"
+}

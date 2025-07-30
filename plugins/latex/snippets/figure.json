@@ -1,0 +1,40 @@
+{
+  "name": "figure",
+  "description": "Creates a figure with caption and optional label",
+  "parameters": [
+    {
+      "name": "image_path",
+      "type": "string",
+      "description": "Path to the image file",
+      "required": true
+    },
+    {
+      "name": "caption",
+      "type": "string",
+      "description": "Figure caption",
+      "required": true
+    },
+    {
+      "name": "label",
+      "type": "string", 
+      "description": "Optional label for referencing (without 'fig:' prefix)",
+      "required": false,
+      "default": ""
+    },
+    {
+      "name": "width",
+      "type": "string",
+      "description": "Figure width (e.g., '0.8\\textwidth', '5cm')",
+      "required": false,
+      "default": "0.8\\textwidth"
+    },
+    {
+      "name": "position",
+      "type": "string",
+      "description": "Figure position specifier (e.g., 'htbp', '!h')",
+      "required": false,
+      "default": "htbp"
+    }
+  ],
+  "template": "\\begin{figure}[{position}]\n\\centering\n\\includegraphics[width={width}]{{image_path}}\n\\caption{{caption}}{{#if label}}\\label{fig:{label}}{{/if}}\n\\end{figure}"
+}

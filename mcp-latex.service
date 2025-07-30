@@ -1,0 +1,25 @@
+# Systemd service file for MCP LaTeX Server
+# Place this in /etc/systemd/system/mcp-latex.service
+# Then run: sudo systemctl enable mcp-latex && sudo systemctl start mcp-latex
+
+[Unit]
+Description=MCP LaTeX Server
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=simple
+RemainAfterExit=no
+Restart=always
+RestartSec=5
+ExecStartPre=-/usr/bin/docker stop mcp-latex-server
+ExecStartPre=-/usr/bin/docker rm mcp-latex-server
+ExecStart=/usr/bin/docker run --rm --name mcp-latex-server -p 8083:8080 mcp-latex-simple
+ExecStop=/usr/bin/docker stop mcp-latex-server
+ExecStopPost=/usr/bin/docker rm mcp-latex-server
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=mcp-latex
+
+[Install]
+WantedBy=multi-user.target

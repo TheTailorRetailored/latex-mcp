@@ -1,0 +1,20 @@
+{
+  "name": "equation",
+  "description": "Creates a numbered equation with optional label",
+  "parameters": [
+    {
+      "name": "equation",
+      "type": "string",
+      "description": "The LaTeX equation content",
+      "required": true
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "description": "Optional label for referencing (without 'eq:' prefix)",
+      "required": false,
+      "default": ""
+    }
+  ],
+  "template": "\\begin{equation}{{#if label}}\\label{eq:{label}}{{/if}}\n{equation}\n\\end{equation}"
+}

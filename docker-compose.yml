@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  mcp-latex:
+    build:
+      context: .
+      dockerfile: Dockerfile.simple
+    image: mcp-latex:latest
+    container_name: mcp-latex
+    user: "1003:1003"  # lachlan user
+    environment:
+      LATEX_BASE_URL: "http://localhost:8080"
+      APP_ROOT: /app
+      COMPILED_DIR: /app/compiled
+      LOGS_DIR: /app/compiled/logs
+      TEMPLATES_DIR: /app/templates
+      HOST: "0.0.0.0"
+      PORT: "8080"
+      MCP_HTTP_PATH: "/mcp"
+      HOME: /app
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m
+      - /var/tmp:size=256m
+    volumes:
+      - ./plugins/latex/compiled:/app/compiled:rw
+      - ./plugins/latex/templates:/app/templates:ro
+      - ./plugins/latex/logs:/app/compiled/logs:rw
+    ports:
+      - "127.0.0.1:8080:8080"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ "ALL" ]
+    restart: unless-stopped
