@@ -4,24 +4,21 @@
 
 Build and run the LaTeX MCP Server using Docker.
 
-### Option 1: Simple Build (Recommended)
+### Option 1: Docker Build
 
 ```bash
-# Build using pre-built texlive image (faster)
-docker build -f Dockerfile.simple -t mcp-latex-simple ../..
+# Build using pre-built texlive image
+docker build -t mcp-latex ../..
 
 # Run the container
-docker run -d --name mcp-latex-server --restart unless-stopped -p 8083:8080 mcp-latex-simple
+docker run -d --name mcp-latex-server --restart unless-stopped -p 8083:8080 mcp-latex
 ```
 
-### Option 2: Docker Compose
+### Option 2: Docker Compose (Recommended)
 
 ```bash
-# Standalone service
-docker-compose -f docker-compose-standalone.yml up -d
-
-# Or with the snippet version
-docker-compose -f docker-compose-snippet.yml up -d
+# Build and run with compose
+docker-compose up -d
 ```
 
 ## Configuration
