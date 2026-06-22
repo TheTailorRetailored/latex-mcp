@@ -13,9 +13,12 @@ dependencies = [
     "uvicorn>=0.30"
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
 [project.urls]
-Homepage = "https://github.com/lachlanbridges/latex-mcp-server"
-Repository = "https://github.com/lachlanbridges/latex-mcp-server"
+Homepage = "https://github.com/TheTailorRetailored/latex-mcp"
+Repository = "https://github.com/TheTailorRetailored/latex-mcp"
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]

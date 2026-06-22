@@ -1,91 +1,72 @@
 # LaTeX MCP Server
 
-A Model Context Protocol (MCP) server for LaTeX compilation and document generation.
+A small Model Context Protocol server that compiles LaTeX documents and serves the resulting PDFs. It also exposes a handful of document templates and reusable snippets.
 
-## Features
+The project is usable but lightly maintained: I am not currently developing new features for it.
 
-- **LaTeX Compilation**: Compile LaTeX source to PDF using various engines (pdflatex, xelatex, lualatex)
-- **Template System**: Manage reusable LaTeX templates
-- **Snippets/Macros**: Use predefined LaTeX components (equations, figures, multiple choice questions, etc.)
-- **Automatic Cleanup**: Old files are automatically cleaned up during compilation
-- **Caching**: Compiled documents are cached to avoid recompilation
-- **Security**: Dangerous LaTeX commands are blocked
+## Tools
 
-## MCP Tools
+- `compile_latex` compiles a complete document with pdfLaTeX, XeLaTeX or LuaLaTeX.
+- `list_templates` and `get_template` expose the bundled document templates.
+- `list_snippets`, `get_snippet_info` and `render_snippet` work with the bundled equation, figure and multiple-choice snippets.
 
-### Core Tools
-- `compile_latex` - Compile LaTeX source to PDF
-- `list_templates` - List available LaTeX templates  
-- `get_template` - Get template source code
+Compiled files are cached by source and engine, then removed after a configurable period.
 
-### Snippets System
-- `list_snippets` - List available LaTeX snippets/macros
-- `get_snippet_info` - Get detailed info about a snippet including parameters
-- `render_snippet` - Render a snippet with provided parameters
+## Run with Docker
 
-## Available Snippets
+Build from the repository root:
 
-- **multiple_choice** - Creates multiple choice questions with 4 options
-- **equation** - Creates numbered equations with optional labels
-- **figure** - Creates figures with captions and optional labels
-
-## Installation
-
-### Docker (Recommended)
-
-1. Build the image:
 ```bash
-docker build -f Dockerfile.simple -t mcp-latex-simple .
+docker build -f deployment/docker/Dockerfile -t latex-mcp .
+docker run --rm -p 8083:8080 latex-mcp
 ```
 
-2. Run the container:
+The MCP HTTP endpoint is then available at `http://localhost:8083/mcp`.
+
+Docker Compose configuration is under `deployment/docker/`:
+
 ```bash
-docker run -d --name mcp-latex-server --restart unless-stopped -p 8083:8080 mcp-latex-simple
+docker compose -f deployment/docker/docker-compose.yml up --build
 ```
 
-### Manual Installation
+## Run directly
 
-1. Install system dependencies:
+This requires Python 3.11+ and a TeX distribution providing `pdflatex`, `xelatex` or `lualatex`.
+
 ```bash
-# Install LaTeX
-sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-latex-extra
-
-# Install Python dependencies
-pip install fastmcp jinja2 pydantic pyyaml uvicorn
-```
-
-2. Run the server:
-```bash
+python -m pip install .
 python server.py
 ```
 
-## Configuration
+Configuration is available through three environment variables:
 
-Set environment variables:
-- `PORT` - Server port (default: 8080)
-- `LATEX_BASE_URL` - Base URL for compiled files
-- `LATEX_MAX_FILE_AGE_HOURS` - File cleanup age in hours (default: 24)
+- `PORT` — HTTP port, defaulting to `8080`.
+- `LATEX_BASE_URL` — public base URL used in PDF and log links.
+- `LATEX_MAX_FILE_AGE_HOURS` — compiled-file retention, defaulting to 24 hours.
 
-## Usage with Claude
+## Security boundary
 
-Configure Claude Desktop to connect to your MCP server:
-- URL: `https://your-domain.com/`
-- Transport: HTTP
+LaTeX is a programmable language, and rejecting a short list of commands does not make arbitrary documents safe. Shell escape is disabled and the server performs some basic source validation, but this is not a hardened multi-tenant sandbox.
 
-## API
+Use it with trusted inputs, preferably inside a disposable container with no secrets, restricted resources and no unnecessary network or filesystem access. Do not expose the HTTP service publicly without adding authentication and further isolation.
 
-The server exposes a Model Context Protocol interface on the configured port and path.
+## Maintained alternatives
 
-## Security
+If this server no longer fits your workflow, these more active projects cover adjacent use cases:
 
-- Dangerous LaTeX commands are blocked
-- File system access is restricted
-- No shell escapes allowed during compilation
-- Automatic cleanup prevents disk space issues
+- [mcp-latex-server](https://github.com/RobertoDure/mcp-latex-server) — LaTeX file creation, editing and project management.
+- [latex-mcp](https://github.com/SepineTam/latex-mcp) — LaTeX compilation inside Docker.
+- [texflow-mcp](https://github.com/aaronsb/texflow-mcp) — structured document authoring with an MCP compiler.
 
 ## Development
 
-See the included configuration files:
-- `docker-compose-standalone.yml` - Docker Compose setup
-- `mcp-latex.service` - Systemd service
-- `nginx-include.conf` - Nginx configuration
+```bash
+python -m pip install -e ".[dev]"
+pytest
+```
+
+Deployment examples for Docker, systemd and Nginx live under `deployment/`.
+
+## Licence
+
+MIT
