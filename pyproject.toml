@@ -3,7 +3,7 @@ name = "latex-mcp-server"
 version = "1.0.0"
 description = "A Model Context Protocol server for LaTeX compilation and document generation"
 authors = [{name = "Lachlan Bridges", email = "lachlan@lachlanbridges.com"}]
-license = {text = "MIT"}
+license = "MIT"
 requires-python = ">=3.11"
 dependencies = [
     "fastmcp>=2.10",
@@ -23,3 +23,10 @@ Repository = "https://github.com/TheTailorRetailored/latex-mcp"
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["plugins*"]
+namespaces = true
+
+[tool.setuptools.package-data]
+"plugins.latex" = ["templates/*.tex", "snippets/*.json"]
